@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kiyasutheen — Flutter Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0F14;
+    --surface:#131920;
+    --surface-2:#1B232C;
+    --border:#232D38;
+    --text:#EDF2F7;
+    --muted:#7C8B9A;
+    --accent:#34E4C1;
+    --accent-dim: rgba(52,228,193,0.14);
+    --accent-2:#FF7A59;
+    --accent-2-dim: rgba(255,122,89,0.14);
+    --radius-lg: 26px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    padding-bottom:92px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{
+    max-width:520px;
+    margin:0 auto;
+    padding:0 20px;
+  }
+
+  /* ---------- fake status bar ---------- */
+  .statusbar{
+    max-width:520px;
+    margin:0 auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 26px 0 26px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:0.5px;
+  }
+  .statusbar .icons{ display:flex; gap:6px; align-items:center; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:34px 0 30px 0;
+  }
+  .app-icon{
+    width:64px;
+    height:64px;
+    border-radius:20px;
+    background:linear-gradient(145deg, var(--accent), #1FA98D);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:26px;
+    color:#04211C;
+    box-shadow:0 8px 24px rgba(52,228,193,0.25);
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:30px;
+    line-height:1.2;
+    margin-bottom:8px;
+  }
+  .hero .role{
+    color:var(--accent);
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    margin-bottom:14px;
+  }
+  .hero p.tagline{
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.6;
+    max-width:420px;
+    margin-bottom:24px;
+  }
+
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-bottom:26px;
+  }
+  .stat-chip{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    padding:12px 8px;
+    text-align:center;
+  }
+  .stat-chip .num{
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:18px;
+    color:var(--text);
+  }
+  .stat-chip .label{
+    font-size:10px;
+    color:var(--muted);
+    margin-top:2px;
+    line-height:1.3;
+  }
+
+  .cta-row{ display:flex; gap:10px; }
+  .btn{
+    flex:1;
+    text-align:center;
+    padding:14px 16px;
+    border-radius:var(--radius-md);
+    font-weight:600;
+    font-size:14px;
+    font-family:'Inter', sans-serif;
+  }
+  .btn-primary{
+    background:var(--accent);
+    color:#04211C;
+  }
+  .btn-secondary{
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--text);
+  }
+
+  /* ---------- section heading ---------- */
+  section{ padding:36px 0 6px 0; }
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:16px;
+  }
+  .section-head h2{
+    font-family:'Sora', sans-serif;
+    font-size:19px;
+    font-weight:700;
+  }
+  .section-head span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--muted);
+  }
+
+  /* ---------- skills: permission-card style ---------- */
+  .perm-card{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    padding:16px;
+    margin-bottom:10px;
+  }
+  .perm-icon{
+    width:38px;
+    height:38px;
+    min-width:38px;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--accent-dim);
+  }
+  .perm-icon svg{ width:19px; height:19px; stroke:var(--accent); }
+  .perm-icon.alt{ background:var(--accent-2-dim); }
+  .perm-icon.alt svg{ stroke:var(--accent-2); }
+  .perm-text h3{
+    font-size:14.5px;
+    font-weight:600;
+    margin-bottom:3px;
+  }
+  .perm-text p{
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.5;
+  }
+
+  /* ---------- projects: app-store row style ---------- */
+  .app-row{
+    display:flex;
+    gap:14px;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .app-row:last-child{ border-bottom:none; }
+  .app-thumb{
+    width:56px;
+    height:56px;
+    min-width:56px;
+    border-radius:15px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    color:var(--accent);
+    font-size:20px;
+  }
+  .app-row-body{ flex:1; min-width:0; }
+  .app-row-body h3{
+    font-size:14.5px;
+    font-weight:600;
+    margin-bottom:3px;
+  }
+  .app-row-body p{
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.5;
+    margin-bottom:8px;
+  }
+  .app-links{ display:flex; gap:8px; flex-wrap:wrap; }
+  .app-links a{
+    font-size:11px;
+    font-family:'JetBrains Mono', monospace;
+    color:var(--accent);
+    background:var(--accent-dim);
+    padding:5px 10px;
+    border-radius:100px;
+  }
+
+  /* ---------- experience: changelog style ---------- */
+  .log-entry{
+    position:relative;
+    padding-left:22px;
+    padding-bottom:24px;
+    border-left:1px solid var(--border);
+    margin-left:6px;
+  }
+  .log-entry:last-child{ border-left:1px solid transparent; padding-bottom:0; }
+  .log-entry::before{
+    content:'';
+    position:absolute;
+    left:-5px;
+    top:2px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--accent);
+  }
+  .log-version{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--accent);
+    margin-bottom:4px;
+  }
+  .log-entry h3{
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:2px;
+  }
+  .log-entry .sub{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .log-entry ul{
+    list-style:none;
+  }
+  .log-entry li{
+    font-size:13px;
+    color:#C6D0DA;
+    line-height:1.6;
+    padding-left:14px;
+    position:relative;
+    margin-bottom:4px;
+  }
+  .log-entry li::before{
+    content:'–';
+    position:absolute;
+    left:0;
+    color:var(--muted);
+  }
+
+  /* ---------- contact: bottom sheet style ---------- */
+  .sheet{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:24px 20px;
+    margin-top:10px;
+    text-align:center;
+  }
+  .sheet .handle{
+    width:36px;
+    height:4px;
+    background:var(--border);
+    border-radius:100px;
+    margin:0 auto 18px auto;
+  }
+  .sheet h2{
+    font-family:'Sora', sans-serif;
+    font-size:19px;
+    margin-bottom:6px;
+  }
+  .sheet p{
+    color:var(--muted);
+    font-size:13.5px;
+    margin-bottom:20px;
+  }
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .contact-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    padding:12px;
+    font-size:13px;
+    font-weight:500;
+  }
+  .contact-item svg{ width:16px; height:16px; stroke:var(--accent); min-width:16px; }
+
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:11px;
+    padding:30px 0 10px 0;
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  /* ---------- bottom tab bar ---------- */
+  .tabbar{
+    position:fixed;
+    bottom:14px;
+    left:50%;
+    transform:translateX(-50%);
+    width:calc(100% - 40px);
+    max-width:460px;
+    background:rgba(19,25,32,0.85);
+    backdrop-filter:blur(14px);
+    border:1px solid var(--border);
+    border-radius:100px;
+    display:flex;
+    justify-content:space-around;
+    padding:10px 6px;
+    z-index:50;
+  }
+  .tab{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    color:var(--muted);
+    font-size:10px;
+    font-weight:500;
+    padding:4px 14px;
+    border-radius:100px;
+    transition:color .2s, background .2s;
+  }
+  .tab svg{ width:18px; height:18px; stroke:currentColor; }
+  .tab.active{ color:var(--accent); background:var(--accent-dim); }
+
+  @media (min-width:560px){
+    .wrap, .statusbar{ max-width:560px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="statusbar">
+    <span>9:41</span>
+    <div class="icons">
+      <span>●●●</span><span>Wi-Fi</span><span>100%</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero" id="home">
+      <div class="app-icon">K</div>
+      <h1>Kiyasutheen</h1>
+      <div class="role">Flutter Developer · Android &amp; iOS</div>
+      <p class="tagline">I design, build and ship mobile apps from scratch — solo — API integration, payments, auth, and AI features included. No designer, no tester, just a finished app in the store.</p>
+
+      <div class="stat-row">
+        <div class="stat-chip"><div class="num">15+</div><div class="label">Apps built</div></div>
+        <div class="stat-chip"><div class="num">2</div><div class="label">Play Store</div></div>
+        <div class="stat-chip"><div class="num">1</div><div class="label">App Store</div></div>
+        <div class="stat-chip"><div class="num">2yr</div><div class="label">Experience</div></div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#work" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-secondary">Contact Me</a>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="section-head">
+        <h2>Skills</h2>
+        <span class="mono">// stack</span>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M17 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/><path d="M12 18h.01"/></svg></div>
+        <div class="perm-text">
+          <h3>Flutter &amp; Dart</h3>
+          <p>End-to-end app development for Android &amp; iOS from a single codebase — 15+ apps shipped.</p>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="perm-text">
+          <h3>Firebase</h3>
+          <p>FCM push notifications, Firebase Auth, and real-time sync with Firestore in production apps.</p>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-icon alt"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M2 10h20"/><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 15h4"/></svg></div>
+        <div class="perm-text">
+          <h3>Razorpay Payments</h3>
+          <p>Order creation, payment verification via webhooks, and failure/retry handling for real transactions.</p>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-icon alt"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0-3 3.87V17a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-6.13A4 4 0 0 0 16 7V6a4 4 0 0 0-4-4z"/></svg></div>
+        <div class="perm-text">
+          <h3>AI Integration</h3>
+          <p>Groq for audio summarization and title-to-description generation, plus Gemini API — built with the help of ChatGPT and Claude AI for faster iteration.</p>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 17V7a2 2 0 0 1 2-2h8l6 6v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 5v6h6"/></svg></div>
+        <div class="perm-text">
+          <h3>State Management</h3>
+          <p>GetX and Provider on most projects, with basic BLoC where the app's scale calls for it.</p>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M20 4 4 20"/><path d="M6 4h4v4"/><path d="M18 20h-4v-4"/></svg></div>
+        <div class="perm-text">
+          <h3>Lightweight Backend APIs</h3>
+          <p>FastAPI (Python) endpoints for small app needs, deployed on Render or Supabase.</p>
+        </div>
+      </div>
+
+      <div class="perm-card">
+        <div class="perm-icon alt"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div class="perm-text">
+          <h3>Multi-language Apps</h3>
+          <p>Built apps supporting English, Tamil, and Hindi with in-app language switching for regional users.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="work">
+      <div class="section-head">
+        <h2>Projects</h2>
+        <span class="mono">// featured</span>
+      </div>
+
+      <div class="app-row">
+        <div class="app-thumb">Z</div>
+        <div class="app-row-body">
+          <h3>Zaron</h3>
+          <p>A B2B ordering app for roofing and steel dealers — browse catalogs, place bulk orders, and track order status, replacing manual phone/paper ordering.</p>
+          <div class="app-links">
+            <a href="https://play.google.com/store/apps/details?id=com.zaron.apps">Play Store</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row">
+        <div class="app-thumb">O</div>
+        <div class="app-row-body">
+          <h3>Onit</h3>
+          <p>Users assign tasks to each other, get instant updates via FCM, and pay for premium features through Razorpay — with AI-generated task summaries and descriptions.</p>
+          <div class="app-links">
+            <a href="https://play.google.com/store/apps/details?id=com.regent_todo_app">Play Store</a>
+            <a href="[Onit App Store link]">App Store</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row">
+        <div class="app-thumb">J</div>
+        <div class="app-row-body">
+          <h3>[Job Portal App Name]</h3>
+          <p>A LinkedIn/Indeed-style job platform with English, Tamil, and Hindi language support. Two consent-based flows — Employee login for job seekers, Company login for employers to find talent — with an approach/connect system for direct messaging between them.</p>
+          <div class="app-links">
+            <span class="mono" style="color:var(--muted); font-size:11px;">In development</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row">
+        <div class="app-thumb">A</div>
+        <div class="app-row-body">
+          <h3>Attendance</h3>
+          <p>Face-recognition attendance using Google ML Kit — employees mark attendance via face scan, with leave requests, attendance correction requests, and shift permission workflows.</p>
+          <div class="app-links">
+            <span class="mono" style="color:var(--muted); font-size:11px;">Internal company app</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row">
+        <div class="app-thumb">S</div>
+        <div class="app-row-body">
+          <h3>Split-App</h3>
+          <p>A Splitwise-style bill-splitting app — create a group, pick a currency, and split shared expenses so everyone can see who owes what.</p>
+          <div class="app-links">
+            <span class="mono" style="color:var(--muted); font-size:11px;">Internal company app</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row">
+        <div class="app-thumb">F</div>
+        <div class="app-row-body">
+          <h3>Frozen Order</h3>
+          <p>A B2B ordering app for frozen food brands — browse brands, explore each brand's products, and order through a cart flow. Tracks order history (editable pre-approval, locked once completed) with invoice image and PDF access.</p>
+          <div class="app-links">
+            <span class="mono" style="color:var(--muted); font-size:11px;">Internal company app</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row">
+        <div class="app-thumb">P</div>
+        <div class="app-row-body">
+          <h3>Production</h3>
+          <p>A role-based production tracking app with four flows — admin, production, cutting, and accessories entry — each showing step-by-step process updates, with FCM notifying teams as items move through the pipeline.</p>
+          <div class="app-links">
+            <span class="mono" style="color:var(--muted); font-size:11px;">Internal company app</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="section-head">
+        <h2>Experience</h2>
+        <span class="mono">// changelog</span>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-version">v2.0 · Feb-2025 – Present</div>
+        <h3>Flutter Developer(Android & iOS)</h3>
+        <div class="sub">Regent Info Solution — Tirupur / Onsite</div>
+        <ul>
+          <li>Built and shipped 15+ Flutter apps end-to-end with no dedicated designer or tester</li>
+          <li>Deployed 2 apps to Play Store, 1 to App Store — owned the full release process</li>
+          <li>Integrated Razorpay, Firebase (FCM/Auth/Firestore), and Groq AI features across apps</li>
+        </ul>
+      </div>
+
+      <div class="log-entry">
+        <div class="log-version">v1.0 · 6 months (Jul 2024 – Jan 2025)</div>
+        <h3>Flutter Mobile App Development</h3>
+        <div class="sub">Accent Techno Soft(coimbatore)</div>
+        <ul>
+          <li>Intensive hands-on Flutter training covering state management, APIs, and app architecture</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="sheet">
+        <div class="handle"></div>
+        <h2>Let's talk</h2>
+        <p>Open to Flutter / mobile developer roles</p>
+        <div class="contact-grid">
+          <a class="contact-item" href="mailto:kiyasutheen3@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>
+            Email
+          </a>
+          <a class="contact-item" href="https://www.linkedin.com/in/kiyasu-theen-3310bb293?utm_source=share_via&utm_content=profile&utm_medium=member_android">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a class="contact-item" href="https://github.com/kiyasuktm">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+          <!-- <a class="contact-item" href="[Your Play Store Developer Page URL]">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m3 3 18 9-18 9V3z"/></svg>
+            Play Store
+          </a> -->
+          <a class="contact-item" href="tel:+919344594616">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2
+      19.79 19.79 0 0 1-8.63-3.07
+      19.5 19.5 0 0 1-6-6
+      19.79 19.79 0 0 1-3.07-8.67
+      A2 2 0 0 1 4.11 2h3
+      a2 2 0 0 1 2 1.72
+      12.84 12.84 0 0 0 .7 2.81
+      2 2 0 0 1-.45 2.11L8.09 9.91
+      a16 16 0 0 0 6 6l1.27-1.27
+      a2 2 0 0 1 2.11-.45
+      12.84 12.84 0 0 1 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+  Phone
+</a>
+        </div>
+      </div>
+      <footer>designed &amp; built by Kiyasutheen · v2.0</footer>
+    </section>
+
+  </div>
+
+  <!-- BOTTOM TAB BAR -->
+  <nav class="tabbar">
+    <a class="tab active" data-target="home" href="#home">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 9.5 12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+      Home
+    </a>
+    <a class="tab" data-target="skills" href="#skills">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Skills
+    </a>
+    <a class="tab" data-target="work" href="#work">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Work
+    </a>
+    <a class="tab" data-target="contact" href="#contact">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>
+      Contact
+    </a>
+  </nav>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const sections = ['home','skills','work','experience','contact'].map(id => document.getElementById(id));
+
+  function setActive(id){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.target === id));
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => setActive(tab.dataset.target));
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const id = entry.target.id;
+        const mapped = id === 'experience' ? 'work' : id;
+        setActive(mapped);
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+
+  sections.forEach(s => s && observer.observe(s));
+</script>
+
+</body>
+</html>
